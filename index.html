@@ -23,7 +23,8 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:clip}
+.marquee{contain:paint}
 body{margin:0;background:var(--ink);color:var(--text);font-family:var(--font-body);font-size:17px;line-height:1.6;overflow-x:hidden}
 a{color:var(--amber)}
 :focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px}
@@ -48,7 +49,7 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:16px;heigh
 .navlinks a:hover::after{transform:scaleX(1)}
 
 /* hero */
-.hero{padding:96px 0 72px}
+.hero{padding-block:96px 72px}
 .runlog{font-family:var(--font-mono);font-size:13px;color:var(--tide);display:flex;align-items:center;gap:10px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--tide);box-shadow:0 0 0 0 rgba(79,209,197,.6);animation:ping 2s infinite}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(79,209,197,.55)}80%,100%{box-shadow:0 0 0 12px rgba(79,209,197,0)}}
@@ -56,9 +57,9 @@ h1{font-family:var(--font-display);font-weight:800;font-size:clamp(46px,6.2vw,84
 h1 .ch{display:inline-block;animation:drop .8s cubic-bezier(.2,.9,.25,1.2) both}
 h1 .accent{color:var(--amber)}
 @keyframes drop{from{transform:translateY(.5em) rotate(6deg);opacity:.15}to{transform:none;opacity:1}}
-.role{font-family:var(--font-display);font-size:clamp(22px,3.2vw,34px);font-weight:600;display:flex;gap:.35em;flex-wrap:wrap;align-items:baseline}
-.rotator{display:inline-grid;height:1.25em;overflow:hidden;color:var(--tide)}
-.rotator span{grid-area:1/1;transition:transform .7s cubic-bezier(.7,0,.2,1)}
+.role{font-family:var(--font-display);font-size:clamp(20px,3vw,32px);font-weight:600;display:flex;gap:.35em;flex-wrap:wrap;align-items:center;line-height:1.3}
+.rotator{display:inline-grid;height:1.3em;overflow:hidden;color:var(--tide);white-space:nowrap}
+.rotator span{grid-area:1/1;transition:transform .7s cubic-bezier(.7,0,.2,1),opacity .5s}
 .lede{max-width:46ch;color:var(--muted);font-size:19px;margin:22px 0 34px}
 .ctas{display:flex;gap:14px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid var(--line);color:var(--text);background:var(--panel);cursor:pointer;transition:transform .2s, border-color .2s, background .2s;font-family:var(--font-body)}
@@ -79,14 +80,14 @@ section{padding:96px 0}
 h2{font-family:var(--font-display);font-weight:800;font-size:clamp(34px,5vw,56px);letter-spacing:-.03em;line-height:1.05;margin:10px 0 18px;text-wrap:balance}
 .sub{color:var(--muted);max-width:62ch;margin:0 0 40px}
 .rise{transition:transform .9s cubic-bezier(.2,.8,.2,1)}
-.rise.pending{transform:translateY(28px)}
+
 
 /* projects */
 .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
 .chip{font-family:var(--font-mono);font-size:13px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
 .chip[aria-pressed="true"]{background:var(--tide);color:#05221f;border-color:var(--tide)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:20px}
-.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:14px;transform-style:preserve-3d;transition:transform .25s ease, border-color .25s, opacity .35s;overflow:hidden}
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+.card{min-width:0;position:relative;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:14px;transform-style:preserve-3d;transition:transform .25s ease, border-color .25s, opacity .35s;overflow:hidden}
 .card::before{content:"";position:absolute;inset:0;background:radial-gradient(500px circle at var(--mx,50%) var(--my,0%), rgba(255,181,71,.12), transparent 40%);opacity:0;transition:opacity .3s;pointer-events:none}
 .card:hover{border-color:#2f5266}
 .card:hover::before{opacity:1}
@@ -190,7 +191,28 @@ pre{white-space:pre-wrap;font-family:var(--font-mono);font-size:12.5px;color:var
 .links{display:flex;gap:12px;flex-wrap:wrap}
 footer{border-top:1px solid var(--line);padding:26px 0;font-family:var(--font-mono);font-size:12px;color:var(--muted)}
 
-@media (max-width:860px){.chatwrap{grid-template-columns:1fr}.navlinks{display:none}.hero{padding:64px 0 48px}section{padding:72px 0}}
+@media (max-width:860px){.chatwrap{grid-template-columns:1fr}.navlinks{display:none}.hero{padding-block:56px 40px}section{padding:72px 0}}
+
+/* small screens: calm background, stacked workflows, compact chat */
+@media (max-width:1199px){#flow,.scrim,.glow{display:none}}
+@media (max-width:700px){
+  .wrap{padding:0 18px}
+  h1{font-size:clamp(40px,12vw,56px)}
+  .role{flex-direction:column;align-items:flex-start;gap:2px}
+  .lede{font-size:17px}
+  section{padding:56px 0}
+  .card{padding:20px}
+  .card.wide h3{font-size:24px}
+  .wf-row{flex-direction:column;gap:6px;overflow:visible}
+  .wf-track{display:none}
+  .wf-node{flex-direction:row;justify-content:flex-start;gap:10px;min-width:0;padding:8px 12px;text-align:left}
+  .wf-node.on{transform:translateX(4px)}
+  .chat{height:500px}
+  .suggest button:nth-child(n+4){display:none}
+  .launch{padding:8px}
+  .launch .lt{display:none}
+  .filters{gap:8px}
+}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
@@ -318,7 +340,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;font-family:var(--font-mo
 
 <footer><div class="wrap">© <span id="yr"></span> Vivek Kurisetti · built with a canvas, a lot of easing curves, and zero trackers</div></footer>
 
-<a class="launch" href="#ask" id="launch"><span class="orb"></span>Ask about Vivek</a>
+<a class="launch" href="#ask" id="launch" aria-label="Ask about Vivek"><span class="orb"></span><span class="lt">Ask about Vivek</span></a>
 
 <!-- =====================================================================
      THE KNOWLEDGE DOCUMENT
@@ -406,19 +428,19 @@ His LinkedIn is linkedin.com/in/vivek-kurisetti and his GitHub is github.com/viv
 /* ================= EDIT YOUR PROJECTS HERE ================= */
 const PROJECTS = [
   { title:"Near-Real-Time Data Pipeline Rebuild", category:"Pipelines", year:"PayU", wide:true,
-    desc:"Restructured the entire CDC pipeline: MySQL/PostgreSQL → Debezium → Kafka → Spark → S3 → Airflow → Redshift. Merged the separate MySQL and PostgreSQL codebases into one, tuned Redshift dist and sort keys for ingestion, repartitioned Kafka topics for even load, and added dynamic partitioning for writes to S3.",
+    desc:"Rebuilt PayU's CDC pipeline end to end: one codebase for MySQL and PostgreSQL, rebalanced Kafka, smarter S3 partitioning and tuned Redshift keys.",
     impact:"≈50% faster queries · $2,500–3,000 saved per month", stack:["Debezium","Kafka","Spark","S3","Airflow","Redshift","MySQL","PostgreSQL"], link:"" },
   { title:"Real-Time Data Lakehouse", category:"Lakehouse", year:"PayU", wide:true,
-    desc:"Streams changes from MySQL through Debezium and Kafka into Flink, landing them in Apache Iceberg tables on S3 with the AWS Glue catalog. Source data is queryable within 1–2 minutes, which powers real-time reporting and ML model monitoring.",
+    desc:"A streaming lakehouse on Flink and Iceberg that makes source data queryable within 1–2 minutes.",
     impact:"Source → lakehouse in 1–2 minutes", stack:["MySQL","Debezium","Kafka","Flink","Iceberg","S3","Glue"], link:"" },
   { title:"Redshift Optimisation & Cost Engineering", category:"Optimisation", year:"PayU",
-    desc:"Led Redshift optimisation for large-scale analytical workloads: execution plan tuning, sort key and dist key design, and WLM tuning for better cluster efficiency.",
+    desc:"Made large analytical workloads on Redshift faster and cheaper.",
     impact:"≈50% faster queries · ≈30% lower infra cost", stack:["Redshift","SQL","WLM"], link:"" },
   { title:"Payment Recommendation System", category:"ML data", year:"PayU",
-    desc:"Feature pipelines on historical transaction data feed a scoring mechanism that ranks payment options by success probability, served to real-time systems through APIs.",
+    desc:"Ranks payment options by how likely they are to succeed, live at checkout.",
     impact:"Higher transaction success rates", stack:["PySpark","Python","APIs"], link:"" },
   { title:"Fraud Detection Data Pipeline", category:"ML data", year:"PayU",
-    desc:"Feature engineering workflows flag anomalies across multiple parameters, using a streaming plus batch architecture for near-real-time detection.",
+    desc:"Spots anomalies across many signals in near real time.",
     impact:"Lower fraud risk, proactive detection", stack:["Kafka","Spark","Streaming","Batch"], link:"" }
 ];
 const WORKFLOWS = {
@@ -484,7 +506,7 @@ document.getElementById("yr").textContent = new Date().getFullYear();
 /* ---------- role rotator ---------- */
 (function(){
   const spans=[...document.querySelectorAll("#rotator span")]; let i=0;
-  const place=()=>spans.forEach((s,j)=>{ const d=(j-i+spans.length)%spans.length; s.style.transform=`translateY(${d===0?0:(d===spans.length-1?-110:110)}%)`; });
+  const place=()=>spans.forEach((s,j)=>{ const d=(j-i+spans.length)%spans.length; s.style.transform=`translateY(${d===0?0:(d===spans.length-1?-150:150)}%)`; s.style.opacity=d===0?1:0; });
   place(); if(!reduce) setInterval(()=>{ i=(i+1)%spans.length; place(); }, 2400);
 })();
 
@@ -652,9 +674,6 @@ document.getElementById("links").innerHTML = LINKS.map(l=>`<a class="btn" href="
       x.fillText(n.label,0,k==="spark"?82:52);
       x.restore();
     }
-    // run ticker
-    x.font="500 11px 'IBM Plex Mono', monospace"; x.textAlign="right"; x.fillStyle=`rgba(${TEAL},.45)`;
-    x.fillText(`nrt pipeline: mysql/postgres → debezium → kafka → spark → s3 → airflow → redshift · batch #${batch}`, W-20, H-18);
     if(!reduce) requestAnimationFrame(frame);
   }
   build(); addEventListener("resize",build); requestAnimationFrame(frame);
