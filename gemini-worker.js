@@ -5,10 +5,10 @@
 // 1. Get a key at https://aistudio.google.com/apikey
 // 2. Cloudflare dashboard -> Workers & Pages -> Create Worker -> paste this file
 // 3. Settings -> Variables -> add secret GEMINI_API_KEY = your key
-// 4. Set ALLOWED_ORIGIN below to your site (e.g. https://vivek0803.github.io)
+// 4. Set ALLOWED_ORIGIN below to your site (e.g. https://vivek-kurisetti.github.io)
 // 5. Put the Worker URL in GEMINI_PROXY_URL inside index.html
 
-const ALLOWED_ORIGIN = "https://vivek0803.github.io"; // origin only, no /portfolio path
+const ALLOWED_ORIGIN = "https://vivek-kurisetti.github.io"; // origin only, no /portfolio path
 const MODEL = "gemini-3.1-flash-lite"; // stable, free-tier model; swap for any current free Flash model
 
 export default {

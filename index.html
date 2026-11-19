@@ -93,6 +93,7 @@ h2{font-family:var(--font-display);font-weight:800;font-size:clamp(34px,5vw,56px
 .card:hover::before{opacity:1}
 .card.hide{display:none}
 .card.wide{grid-column:1/-1}
+.card .play{align-self:flex-start;padding:11px 18px;font-size:14px}
 .card.wide h3{font-size:30px}
 .card.wide p{max-width:80ch}
 .card .meta{display:flex;justify-content:space-between;gap:12px;font-family:var(--font-mono);font-size:12px;color:var(--muted)}
@@ -137,6 +138,39 @@ main{position:relative}
 @media (max-width:1199px){.spine{display:none}}
 .msg span:first-child{white-space:pre-wrap}
 .ai-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;color:var(--amber);border:1px solid rgba(255,181,71,.35);border-radius:999px;padding:2px 8px;margin-left:6px}
+
+
+/* stats band */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:40px}
+.stat{border:1px solid var(--line);border-radius:16px;padding:18px 20px;background:rgba(15,29,39,.6);position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,181,71,.10) 50%,transparent 70%);transform:translateX(-100%);animation:sheen 5s ease-in-out infinite}
+.stat:nth-child(2)::after{animation-delay:1.2s}.stat:nth-child(3)::after{animation-delay:2.4s}.stat:nth-child(4)::after{animation-delay:3.6s}
+@keyframes sheen{0%,60%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.stat b{display:block;font-family:var(--font-display);font-weight:800;font-size:clamp(28px,3.4vw,40px);letter-spacing:-.02em;color:var(--amber);font-variant-numeric:tabular-nums}
+.stat span{font-family:var(--font-mono);font-size:12.5px;color:var(--muted)}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{padding:14px}}
+
+/* mini pipeline: the moving strip phones and tablets get instead of the big diagram */
+.minipipe{display:none;position:relative;margin-top:34px;padding:12px 4px;gap:6px;justify-content:space-between;flex-wrap:nowrap}
+.minipipe span{position:relative;z-index:1;font:500 11.5px/1 var(--font-mono);color:var(--muted);background:var(--ink);border:1px solid var(--line);border-radius:999px;padding:7px 9px;animation:lit 7s infinite}
+.minipipe span:nth-of-type(2){animation-delay:1s}.minipipe span:nth-of-type(3){animation-delay:2s}.minipipe span:nth-of-type(4){animation-delay:3s}
+.minipipe span:nth-of-type(5){animation-delay:4s}.minipipe span:nth-of-type(6){animation-delay:5s}.minipipe span:nth-of-type(7){animation-delay:6s}
+@keyframes lit{0%,10%{color:#1a1205;background:var(--amber);border-color:var(--amber)}18%,100%{color:var(--muted);background:var(--ink);border-color:var(--line)}}
+.mp-track{position:absolute;left:12px;right:12px;top:50%;height:2px;background:var(--line)}
+.mp-track b{position:absolute;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--tide);box-shadow:0 0 10px var(--tide);animation:ride 7s linear infinite}
+.mp-track b:nth-child(2){animation-delay:1.4s;background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.mp-track b:nth-child(3){animation-delay:2.8s}.mp-track b:nth-child(4){animation-delay:4.2s;background:var(--amber);box-shadow:0 0 10px var(--amber)}.mp-track b:nth-child(5){animation-delay:5.6s}
+@media (max-width:1199px){.minipipe{display:flex}}
+@media (max-width:520px){.minipipe{flex-wrap:wrap;justify-content:flex-start}.mp-track{display:none}}
+
+/* entrance motion: content is visible at rest, it only settles in */
+.card.pop{animation:cardIn .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes cardIn{from{transform:translateY(26px) scale(.985);box-shadow:0 0 0 0 rgba(255,181,71,0)}60%{box-shadow:0 20px 60px -30px rgba(255,181,71,.5)}to{transform:none}}
+.step.pop{animation:stepIn .7s cubic-bezier(.2,.8,.2,1) both}
+.step.pop::before{animation:dotPing 1.2s ease-out}
+@keyframes stepIn{from{transform:translateX(-18px)}to{transform:none}}
+@keyframes dotPing{0%{box-shadow:0 0 0 0 rgba(255,181,71,.7)}100%{box-shadow:0 0 0 14px rgba(255,181,71,0)}}
+.btn{will-change:transform}
 
 /* experience */
 .timeline{display:grid;gap:0;border-left:1px solid var(--line);margin-left:6px}
@@ -249,10 +283,21 @@ footer{border-top:1px solid var(--line);padding:26px 0;font-family:var(--font-mo
       <a class="btn primary" href="#ask">Ask the Vivek bot →</a>
       <a class="btn" href="#projects">See projects</a>
     </div>
+    <div class="minipipe" aria-hidden="true">
+      <div class="mp-track"><b></b><b></b><b></b><b></b><b></b></div>
+      <span>MySQL</span><span>Debezium</span><span>Kafka</span><span>Spark</span><span>S3</span><span>Airflow</span><span>Redshift</span>
+    </div>
    </div>
   </div>
 
   <div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
+
+  <div class="wrap stats" id="stats">
+    <div class="stat"><b data-to="50" data-pre="≈" data-suf="%">≈50%</b><span>faster Redshift queries</span></div>
+    <div class="stat"><b data-to="3" data-pre="$2.5–" data-suf="K/mo">$2.5–3K/mo</b><span>pipeline cost saved</span></div>
+    <div class="stat"><b data-to="30" data-pre="≈" data-suf="%">≈30%</b><span>lower Redshift infra cost</span></div>
+    <div class="stat"><b data-to="2" data-pre="1–" data-suf=" min">1–2 min</b><span>source to lakehouse</span></div>
+  </div>
 
   <section id="projects">
     <div class="wrap">
@@ -410,6 +455,13 @@ Fraud detection data pipeline: Vivek built feature engineering workflows that id
 He enabled near-real-time fraud detection using a combined streaming and batch architecture.
 The pipeline reduced fraud risk and improved system reliability through proactive detection.
 
+## Project: Dagdeep
+Dagdeep: Vivek built Dagdeep as a side project, a browser-based game for learning data engineering and AI engineering by playing instead of reading.
+Dagdeep covers 26 topics, including Spark, Kafka, Iceberg, RAG, agents and MCP, with 289 drill levels.
+It has a work simulator with 25 workplace-style tasks such as debugging incidents, reviewing pull requests, hunting through logs, tuning jobs, writing postmortems and triaging alerts.
+Dagdeep also offers mock interviews, a system design section, and step-through data flows that show how data moves through MySQL and Iceberg.
+You can play Dagdeep at vivek-kurisetti.github.io/Dagdeep.
+
 ## Hobbies
 Outside work, Vivek plays sports such as badminton and cricket.
 He enjoys travelling and exploring new places.
@@ -421,7 +473,7 @@ He is looking for roles based in Hyderabad or Bangalore.
 
 ## Contact
 You can email Vivek at kurisettivivek@gmail.com.
-His LinkedIn is linkedin.com/in/vivek-kurisetti and his GitHub is github.com/vivek0803.
+His LinkedIn is linkedin.com/in/vivek-kurisetti and his GitHub is github.com/vivek-kurisetti.
 </script>
 
 <script>
@@ -433,6 +485,9 @@ const PROJECTS = [
   { title:"Real-Time Data Lakehouse", category:"Lakehouse", year:"PayU", wide:true,
     desc:"A streaming lakehouse on Flink and Iceberg that makes source data queryable within 1–2 minutes.",
     impact:"Source → lakehouse in 1–2 minutes", stack:["MySQL","Debezium","Kafka","Flink","Iceberg","S3","Glue"], link:"" },
+  { title:"Dagdeep: learn DE & AI by playing", category:"Side project", year:"Live", wide:true,
+    desc:"A browser game for learning data and AI engineering by playing instead of reading: drills, a workplace simulator, mock interviews, system design and step-through data flows.",
+    impact:"26 topics · 289 drill levels · 25 workplace tasks", stack:["Spark","Kafka","Iceberg","RAG","Agents","MCP"], link:"https://vivek-kurisetti.github.io/Dagdeep/#play", linkLabel:"Play Dagdeep" },
   { title:"Redshift Optimisation & Cost Engineering", category:"Optimisation", year:"PayU",
     desc:"Made large analytical workloads on Redshift faster and cheaper.",
     impact:"≈50% faster queries · ≈30% lower infra cost", stack:["Redshift","SQL","WLM"], link:"" },
@@ -472,13 +527,19 @@ const WORKFLOWS = {
     ["Scoring","Ranks payment options by probability of success."],
     ["Real-time API","Serves the predictions into live systems through APIs."],
     ["Checkout","Higher transaction success rates and a smoother user experience."]],
+  "Dagdeep: learn DE & AI by playing":[
+    ["Pick a topic","26 topics, from Spark, Kafka and Iceberg to RAG, agents and MCP."],
+    ["Drill levels","289 short drill levels to practise each topic."],
+    ["Work simulator","25 workplace-style tasks: debug incidents, review PRs, hunt through logs, tune jobs, write postmortems, triage alerts."],
+    ["Data flows","Step through how data moves inside MySQL and Iceberg: what moved, where it sits, memory or disk."],
+    ["Interviews","Mock interviews and system design practice."]],
   "Fraud Detection Data Pipeline":[
     ["Stream + batch","Live events stream in while history runs in batch."],
     ["Feature engineering","Builds signals across multiple parameters."],
     ["Anomaly detection","Flags unusual patterns in near real time."],
     ["Proactive alerts","Lower fraud risk and a more reliable system."]]
 };
-const LINKS = [ { label:"LinkedIn ↗", href:"https://www.linkedin.com/in/vivek-kurisetti/" }, { label:"GitHub ↗", href:"https://github.com/vivek0803" }, { label:"kurisettivivek@gmail.com", href:"mailto:kurisettivivek@gmail.com" } ];
+const LINKS = [ { label:"LinkedIn ↗", href:"https://www.linkedin.com/in/vivek-kurisetti/" }, { label:"GitHub ↗", href:"https://github.com/vivek-kurisetti" }, { label:"kurisettivivek@gmail.com", href:"mailto:kurisettivivek@gmail.com" } ];
 const STACK = ["Python","PySpark","Apache Spark","Flink","Kafka","Debezium","Apache Iceberg","Amazon S3","EMR","Glue","Airflow","Redshift","MySQL","PostgreSQL","Cassandra","MongoDB","DynamoDB"];
 /* =========================================================== */
 
@@ -525,7 +586,7 @@ document.getElementById("track").innerHTML = [...STACK,...STACK].map(s=>`<span><
       ${WORKFLOWS[p.title]?`<div class="wf" data-title="${p.title}"><div class="wf-row"><div class="wf-track"><b></b><b></b><b></b><b></b></div>${WORKFLOWS[p.title].map((st,i)=>`<button class="wf-node" type="button" data-i="${i}"><small>${String(i+1).padStart(2,"0")}</small>${st[0]}</button>`).join("")}</div><div class="wf-note" aria-live="polite"></div></div>`:""}
       <div class="impact">${p.impact}</div>
       <div class="stack">${p.stack.map(s=>`<span>${s}</span>`).join("")}</div>
-      ${p.link?`<a href="${p.link}">View project →</a>`:""}
+      ${p.link?`<a class="btn primary play" href="${p.link}" target="_blank" rel="noopener">${p.linkLabel||"View project"} ↗</a>`:""}
     </article>`).join("");
   const cats=["All",...new Set(PROJECTS.map(p=>p.category))];
   filters.innerHTML=cats.map((c,i)=>`<button class="chip" aria-pressed="${i===0}" data-c="${c}">${c}</button>`).join("");
@@ -578,6 +639,32 @@ document.getElementById("links").innerHTML = LINKS.map(l=>`<a class="btn" href="
     marks.forEach(m=>m.classList.toggle("lit", +m.dataset.y<=y));
   }
   addEventListener("scroll",update,{passive:true}); addEventListener("resize",place); addEventListener("load",place); place();
+})();
+
+
+/* ---------- extra motion ---------- */
+(function(){
+  if(reduce || !("IntersectionObserver" in window)) return;
+  // count-up stats (final values are already in the HTML)
+  const fmt=(b,v)=>{ const d=b.dataset; if(d.fmt==="k") return d.pre+(v>=1000?(v/1000).toFixed(v%1000?1:0)+"K":Math.round(v))+d.suf; return d.pre+Math.round(v)+d.suf; };
+  const countUp=b=>{ const to=+b.dataset.to, t0=performance.now(), dur=1400;
+    (function f(t){ const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3); b.textContent=fmt(b,to*e); if(k<1) requestAnimationFrame(f); else b.textContent=fmt(b,to); })(t0); };
+  // heading decode
+  const GL="01{}[]<>/#$%&*=+";
+  const decode=h=>{ const txt=h.textContent, t0=performance.now();
+    (function f(t){ const k=(t-t0)/900; let out=""; for(let i=0;i<txt.length;i++){ const c=txt[i]; out+= (c===" "||k*txt.length*1.2>i) ? c : GL[(Math.random()*GL.length)|0]; } h.textContent=out; if(k<1) requestAnimationFrame(f); else h.textContent=txt; })(t0); };
+  const io=new IntersectionObserver(es=>es.forEach(en=>{
+    if(!en.isIntersecting) return; const el=en.target; io.unobserve(el);
+    if(el.matches(".stat b")) countUp(el);
+    else if(el.matches("h2")) decode(el);
+    else el.classList.add("pop");
+  }),{threshold:.2});
+  document.querySelectorAll(".stat b, section h2, .card, .step").forEach((el,i)=>{ if(el.matches(".step")) el.style.animationDelay=(i%6)*60+"ms"; io.observe(el); });
+  // magnetic buttons
+  document.querySelectorAll(".btn").forEach(b=>{
+    b.addEventListener("pointermove",e=>{ if(e.pointerType!=="mouse") return; const r=b.getBoundingClientRect(); b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.25}px)`; });
+    b.addEventListener("pointerleave",()=>b.style.transform="");
+  });
 })();
 
 /* ---------- cursor glow + launcher ---------- */
@@ -692,7 +779,7 @@ const Bot = (function(){
     DUTY:["day to day","daily","typical","responsib","dutie","handle","manage","current role","does he do","own"],
     WORK:["work","payu","join","intern","promot","dba","administrat","title","designation","job","compan","employ","experien","role","career","position","current","profession","lead","led"],
     SKILL:["skill","certif","python","aws","database","tech","stack","tool","language","expert","proficien","framework","speciali","good at","use"],
-    PROJ:["project","pipeline","sav","cost","optimi","restructur","debezium","near real","built","build","portfolio","ship","made","creat","consolidat"],
+    PROJ:["project","dagdeep","game","side project","learning site","pipeline","sav","cost","optimi","restructur","debezium","near real","built","build","portfolio","ship","made","creat","consolidat"],
     CONTACT:["contact","email","mail","reach","linkedin","github","phone","hire","connect","touch"],
     HOBBY:["hobb","free time","interest","fun","sport","weekend","pastime","enjoy","outside work","badminton","cricket","travel","read","podcast","book"],
     LOC:["based","live","locat","city","relocat","hyderabad","bangalore","bengaluru","open to","looking for","notice","remote"],
@@ -745,7 +832,7 @@ const Bot = (function(){
     if(/^(thanks|thank you|thx|cool|ok|okay|great)\b/i.test(s)) return {text:"Happy to help. Anything else about Vivek?"};
     const qt=terms(s), qc=conceptsOf(s);
     if(qc.has("HOBBY") || /\bhow (does|did|do)\b.*\bwork/i.test(s)) qc.delete("WORK");
-    if(/\b(projects|worked on|built|portfolio)\b/i.test(s) && !/fraud|payment|recommend|lakehouse|lake|redshift|near.real|pipeline rebuild/i.test(s)){
+    if(/\b(projects|worked on|built|portfolio)\b/i.test(s) && !/fraud|payment|recommend|lakehouse|lake|redshift|near.real|pipeline rebuild|dagdeep|game/i.test(s)){
       const names=[...new Set(facts.filter(f=>/^project/i.test(f.section)).map(f=>f.section.replace(/^Project:\s*/i,"")))];
       if(names.length) return {text:`Vivek's main projects are: ${names.join("; ")}. Ask about any one of them for details.`, source:"Projects"};
     }
