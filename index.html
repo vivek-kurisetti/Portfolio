@@ -146,9 +146,9 @@ main{position:relative}
 .stat::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,181,71,.10) 50%,transparent 70%);transform:translateX(-100%);animation:sheen 5s ease-in-out infinite}
 .stat:nth-child(2)::after{animation-delay:1.2s}.stat:nth-child(3)::after{animation-delay:2.4s}.stat:nth-child(4)::after{animation-delay:3.6s}
 @keyframes sheen{0%,60%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.stat b{display:block;font-family:var(--font-display);font-weight:800;font-size:clamp(28px,3.4vw,40px);letter-spacing:-.02em;color:var(--amber);font-variant-numeric:tabular-nums}
+.stat b{display:block;white-space:nowrap;font-family:var(--font-display);font-weight:800;font-size:clamp(24px,2.7vw,38px);letter-spacing:-.02em;color:var(--amber);font-variant-numeric:tabular-nums}
 .stat span{font-family:var(--font-mono);font-size:12.5px;color:var(--muted)}
-@media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{padding:14px}}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{padding:14px}.stat b{font-size:24px}}
 
 /* mini pipeline: the moving strip phones and tablets get instead of the big diagram */
 .minipipe{display:none;position:relative;margin-top:34px;padding:12px 4px;gap:6px;justify-content:space-between;flex-wrap:nowrap}
@@ -171,6 +171,49 @@ main{position:relative}
 @keyframes stepIn{from{transform:translateX(-18px)}to{transform:none}}
 @keyframes dotPing{0%{box-shadow:0 0 0 0 rgba(255,181,71,.7)}100%{box-shadow:0 0 0 14px rgba(255,181,71,0)}}
 .btn{will-change:transform}
+
+
+/* ===== scenes: each section owns the screen, arrives and leaves with motion ===== */
+html{scroll-snap-type:y proximity;scroll-padding-top:64px}
+main > section{min-height:calc(100svh - 64px);scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center}
+main > section.intro{padding:0 0 40px}
+main > section > .wrap{width:100%}
+#flow,.scrim{transition:opacity .9s ease}
+body.deep #flow{opacity:.12}
+body.deep .scrim{opacity:0}
+main > section > *{transition:opacity .8s ease,transform .9s cubic-bezier(.2,.8,.2,1),filter .8s ease}
+html.motion main > section:not(.in) > *{opacity:0;transform:translateY(56px) scale(.97);filter:blur(6px)}
+html.motion main > section.out-up:not(.in) > *{transform:translateY(-56px) scale(.97)}
+
+/* ===== project deck ===== */
+.deckbar{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}
+.counter{display:flex;align-items:baseline;gap:10px;min-width:0}
+.counter b{font-family:var(--font-display);font-size:44px;line-height:1;color:var(--amber);font-variant-numeric:tabular-nums;display:inline-block}
+.counter span{font-family:var(--font-mono);color:var(--muted);font-size:14px}
+.counter i{font-style:normal}
+.counter em{font-style:normal;font-family:var(--font-mono);font-size:13px;color:var(--tide);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arrows{display:flex;gap:8px;flex:none}
+.arrow{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:18px;cursor:pointer;transition:all .2s}
+.arrow:hover{border-color:var(--amber);color:var(--amber);transform:translateY(-2px)}
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0 12px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:flex;align-items:center;gap:8px;font:500 13px/1 var(--font-mono);padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;transition:all .3s}
+.tab small{font-size:10px;opacity:.6}
+.tab.on{background:var(--tide);border-color:var(--tide);color:#05221f}
+.progress{height:2px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:18px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--tide),var(--amber))}
+.deck{display:grid;position:relative}
+.deck .card{grid-area:1/1;visibility:hidden;opacity:0;pointer-events:none}
+.deck .card.active{visibility:visible;opacity:1;pointer-events:auto}
+.deck .card.enter{animation:inR .75s cubic-bezier(.2,.8,.2,1) both}
+.deck .card.enter.from-left{animation-name:inL}
+.deck .card.exit{visibility:visible;animation:outL .6s cubic-bezier(.7,0,.3,1) both}
+.deck .card.exit.to-right{animation-name:outR}
+@keyframes inR{from{opacity:0;transform:translateX(90px) rotate(1.5deg) scale(.96);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-90px) rotate(-1.5deg) scale(.96);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes outL{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-110px) rotate(-2deg) scale(.94);filter:blur(8px)}}
+@keyframes outR{from{opacity:1;transform:none}to{opacity:0;transform:translateX(110px) rotate(2deg) scale(.94);filter:blur(8px)}}
+@media (max-width:700px){.counter b{font-size:34px}.counter em{display:none}.arrow{width:40px;height:40px}}
 
 /* experience */
 .timeline{display:grid;gap:0;border-left:1px solid var(--line);margin-left:6px}
@@ -269,6 +312,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;font-family:var(--font-mo
 
 <main id="top">
   <div class="spine" aria-hidden="true"><div class="fill"></div><i></i><i></i><i></i></div>
+  <section class="intro" id="intro">
   <div class="wrap hero">
    <div>
     <div class="runlog"><span class="dot"></span> STAGE 01 · EXTRACT — source: vivek</div>
@@ -298,14 +342,20 @@ footer{border-top:1px solid var(--line);padding:26px 0;font-family:var(--font-mo
     <div class="stat"><b data-to="30" data-pre="≈" data-suf="%">≈30%</b><span>lower Redshift infra cost</span></div>
     <div class="stat"><b data-to="2" data-pre="1–" data-suf=" min">1–2 min</b><span>source to lakehouse</span></div>
   </div>
+  </section>
 
   <section id="projects">
     <div class="wrap">
       <div class="eyebrow">STAGE 02 · TRANSFORM — projects</div>
       <h2 class="rise">Projects, as workflows</h2>
-      <p class="sub rise">Every project as the pipeline it is. Watch the data move, or tap a step.</p>
-      <div class="filters" id="filters"></div>
-      <div class="grid" id="grid"></div>
+      <p class="sub rise">One project at a time. Each plays as the pipeline it is. Swipe, use the arrows, or pick one below.</p>
+      <div class="deckbar">
+        <div class="counter" aria-live="polite"><b id="dk-num">01</b><span>/ <i id="dk-total">06</i></span><em id="dk-name"></em></div>
+        <div class="arrows"><button class="arrow" id="dk-prev" type="button" aria-label="Previous project">←</button><button class="arrow" id="dk-next" type="button" aria-label="Next project">→</button></div>
+      </div>
+      <div class="tabs" id="filters" role="tablist" aria-label="Projects"></div>
+      <div class="progress"><i id="dk-bar"></i></div>
+      <div class="deck" id="grid"></div>
     </div>
   </section>
 
@@ -479,24 +529,24 @@ His LinkedIn is linkedin.com/in/vivek-kurisetti and his GitHub is github.com/viv
 <script>
 /* ================= EDIT YOUR PROJECTS HERE ================= */
 const PROJECTS = [
-  { title:"Near-Real-Time Data Pipeline Rebuild", category:"Pipelines", year:"PayU", wide:true,
+  { title:"Near-Real-Time Data Pipeline Rebuild", short:"NRT pipeline", category:"Pipelines", year:"PayU", wide:true,
     desc:"Rebuilt PayU's CDC pipeline end to end: one codebase for MySQL and PostgreSQL, rebalanced Kafka, smarter S3 partitioning and tuned Redshift keys.",
     impact:"≈50% faster queries · $2,500–3,000 saved per month", stack:["Debezium","Kafka","Spark","S3","Airflow","Redshift","MySQL","PostgreSQL"], link:"" },
-  { title:"Real-Time Data Lakehouse", category:"Lakehouse", year:"PayU", wide:true,
+  { title:"Real-Time Data Lakehouse", short:"Lakehouse", category:"Lakehouse", year:"PayU", wide:true,
     desc:"A streaming lakehouse on Flink and Iceberg that makes source data queryable within 1–2 minutes.",
     impact:"Source → lakehouse in 1–2 minutes", stack:["MySQL","Debezium","Kafka","Flink","Iceberg","S3","Glue"], link:"" },
-  { title:"Dagdeep: learn DE & AI by playing", category:"Side project", year:"Live", wide:true,
-    desc:"A browser game for learning data and AI engineering by playing instead of reading: drills, a workplace simulator, mock interviews, system design and step-through data flows.",
-    impact:"26 topics · 289 drill levels · 25 workplace tasks", stack:["Spark","Kafka","Iceberg","RAG","Agents","MCP"], link:"https://vivek-kurisetti.github.io/Dagdeep/#play", linkLabel:"Play Dagdeep" },
-  { title:"Redshift Optimisation & Cost Engineering", category:"Optimisation", year:"PayU",
+  { title:"Redshift Optimisation & Cost Engineering", short:"Redshift tuning", category:"Optimisation", year:"PayU",
     desc:"Made large analytical workloads on Redshift faster and cheaper.",
     impact:"≈50% faster queries · ≈30% lower infra cost", stack:["Redshift","SQL","WLM"], link:"" },
-  { title:"Payment Recommendation System", category:"ML data", year:"PayU",
+  { title:"Payment Recommendation System", short:"Payment recs", category:"ML data", year:"PayU",
     desc:"Ranks payment options by how likely they are to succeed, live at checkout.",
     impact:"Higher transaction success rates", stack:["PySpark","Python","APIs"], link:"" },
-  { title:"Fraud Detection Data Pipeline", category:"ML data", year:"PayU",
+  { title:"Fraud Detection Data Pipeline", short:"Fraud detection", category:"ML data", year:"PayU",
     desc:"Spots anomalies across many signals in near real time.",
-    impact:"Lower fraud risk, proactive detection", stack:["Kafka","Spark","Streaming","Batch"], link:"" }
+    impact:"Lower fraud risk, proactive detection", stack:["Kafka","Spark","Streaming","Batch"], link:"" },
+  { title:"Dagdeep: learn DE & AI by playing", short:"Dagdeep", category:"Side project", year:"Live", wide:true,
+    desc:"A browser game for learning data and AI engineering by playing instead of reading: drills, a workplace simulator, mock interviews, system design and step-through data flows.",
+    impact:"26 topics · 289 drill levels · 25 workplace tasks", stack:["Spark","Kafka","Iceberg","RAG","Agents","MCP"], link:"https://vivek-kurisetti.github.io/Dagdeep/#play", linkLabel:"Play Dagdeep" }
 ];
 const WORKFLOWS = {
   "Near-Real-Time Data Pipeline Rebuild":[
@@ -578,7 +628,7 @@ document.getElementById("track").innerHTML = [...STACK,...STACK].map(s=>`<span><
 (function(){
   const grid=document.getElementById("grid"), filters=document.getElementById("filters");
   grid.innerHTML = PROJECTS.map(p=>`
-    <article class="card rise wide" data-cat="${p.category}">
+    <article class="card wide" data-cat="${p.category}">
       <div class="pipe"></div>
       <div class="meta"><span class="tag">${p.category}</span><span>${p.year}</span></div>
       <h3>${p.title}</h3>
@@ -588,13 +638,40 @@ document.getElementById("track").innerHTML = [...STACK,...STACK].map(s=>`<span><
       <div class="stack">${p.stack.map(s=>`<span>${s}</span>`).join("")}</div>
       ${p.link?`<a class="btn primary play" href="${p.link}" target="_blank" rel="noopener">${p.linkLabel||"View project"} ↗</a>`:""}
     </article>`).join("");
-  const cats=["All",...new Set(PROJECTS.map(p=>p.category))];
-  filters.innerHTML=cats.map((c,i)=>`<button class="chip" aria-pressed="${i===0}" data-c="${c}">${c}</button>`).join("");
-  filters.addEventListener("click",e=>{
-    const b=e.target.closest(".chip"); if(!b) return;
-    filters.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));
-    grid.querySelectorAll(".card").forEach(card=>card.classList.toggle("hide", b.dataset.c!=="All" && card.dataset.cat!==b.dataset.c));
-  });
+  /* deck: one project on stage, the previous one exits left, the next enters from the right */
+  const cards=[...grid.querySelectorAll(".card")], N=cards.length;
+  const num=document.getElementById("dk-num"), name=document.getElementById("dk-name"), bar=document.getElementById("dk-bar");
+  document.getElementById("dk-total").textContent=String(N).padStart(2,"0");
+  filters.innerHTML=PROJECTS.map((p,k)=>`<button class="tab" role="tab" type="button" data-k="${k}"><small>${String(k+1).padStart(2,"0")}</small>${p.short||p.title}</button>`).join("");
+  const tabs=[...filters.querySelectorAll(".tab")];
+  let cur=-1, timer=null, t0=0, hold=false; const DWELL=9000;
+  function go(k,dir){
+    k=(k+N)%N; if(k===cur) return;
+    const prev=cur; dir=dir||(k>prev?1:-1);
+    cards.forEach((c,j)=>{ c.classList.remove("enter","exit","from-left","to-right");
+      if(j===k){ c.classList.add("active","enter"); if(dir<0) c.classList.add("from-left"); c.setAttribute("aria-hidden","false"); }
+      else if(j===prev){ c.classList.remove("active"); c.classList.add("exit"); if(dir<0) c.classList.add("to-right"); c.setAttribute("aria-hidden","true"); }
+      else { c.classList.remove("active"); c.setAttribute("aria-hidden","true"); } });
+    cur=k; num.textContent=String(k+1).padStart(2,"0"); name.textContent=PROJECTS[k].title;
+    tabs.forEach((t,j)=>{ t.setAttribute("aria-selected",j===k); t.classList.toggle("on",j===k); });
+    { const t=tabs[k]; filters.scrollTo({left:t.offsetLeft-filters.offsetLeft-(filters.clientWidth-t.offsetWidth)/2,behavior:reduce?"auto":"smooth"}); }
+    num.animate&&!reduce&&num.animate([{transform:"translateY(60%)",opacity:0},{transform:"none",opacity:1}],{duration:450,easing:"cubic-bezier(.2,.8,.2,1)"});
+    t0=performance.now();
+  }
+  const next=()=>go(cur+1,1), prev=()=>go(cur-1,-1);
+  document.getElementById("dk-next").addEventListener("click",()=>{ next(); });
+  document.getElementById("dk-prev").addEventListener("click",()=>{ prev(); });
+  filters.addEventListener("click",e=>{ const t=e.target.closest(".tab"); if(t) go(+t.dataset.k); });
+  // auto-advance with a progress bar; pauses while hovered, focused or off-screen
+  const sec=document.getElementById("projects"); let visible=false;
+  if("IntersectionObserver" in window) new IntersectionObserver(es=>{ visible=es[0].isIntersecting; t0=performance.now(); },{threshold:.4}).observe(sec);
+  sec.addEventListener("pointerenter",e=>{ if(e.pointerType==="mouse") hold=true; }); sec.addEventListener("pointerleave",()=>{ hold=false; t0=performance.now()-(parseFloat(bar.style.width)||0)/100*DWELL; });
+  (function tick(t){ if(!reduce){ if(visible && !hold){ const k=Math.min(1,(t-t0)/DWELL); bar.style.width=k*100+"%"; if(k>=1) next(); } requestAnimationFrame(tick); } })(performance.now());
+  // swipe + keyboard
+  let sx=null; grid.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; },{passive:true});
+  grid.addEventListener("touchend",e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50) (dx<0?next:prev)(); sx=null; });
+  addEventListener("keydown",e=>{ if(!visible || /input|textarea/i.test(document.activeElement.tagName)) return; if(e.key==="ArrowRight") next(); if(e.key==="ArrowLeft") prev(); });
+  go(0,1);
   grid.querySelectorAll(".card").forEach(card=>{
     card.addEventListener("pointermove",e=>{
       const r=card.getBoundingClientRect(), x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
@@ -659,12 +736,27 @@ document.getElementById("links").innerHTML = LINKS.map(l=>`<a class="btn" href="
     else if(el.matches("h2")) decode(el);
     else el.classList.add("pop");
   }),{threshold:.2});
-  document.querySelectorAll(".stat b, section h2, .card, .step").forEach((el,i)=>{ if(el.matches(".step")) el.style.animationDelay=(i%6)*60+"ms"; io.observe(el); });
+  document.querySelectorAll(".stat b, section h2, .step").forEach((el,i)=>{ if(el.matches(".step")) el.style.animationDelay=(i%6)*60+"ms"; io.observe(el); });
   // magnetic buttons
   document.querySelectorAll(".btn").forEach(b=>{
     b.addEventListener("pointermove",e=>{ if(e.pointerType!=="mouse") return; const r=b.getBoundingClientRect(); b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.25}px)`; });
     b.addEventListener("pointerleave",()=>b.style.transform="");
   });
+})();
+
+
+/* ---------- scenes: sections fade/slide in when they take the screen and out when they leave ---------- */
+(function(){
+  if(reduce || !("IntersectionObserver" in window)) return;
+  document.documentElement.classList.add("motion");
+  const secs=[...document.querySelectorAll("main > section")];
+  const io=new IntersectionObserver(es=>es.forEach(en=>{
+    const s=en.target, on=en.intersectionRatio>0.18 || en.intersectionRect.height>innerHeight*.45;
+    s.classList.toggle("in",on);
+    if(s.id==="intro") document.body.classList.toggle("deep",!on);
+    if(!on) s.classList.toggle("out-up", en.boundingClientRect.top<0);
+  }),{threshold:[0,.1,.18,.3,.5]});
+  secs.forEach(s=>{ const r=s.getBoundingClientRect(); if(r.top<innerHeight*.8 && r.bottom>0) s.classList.add("in"); io.observe(s); });
 })();
 
 /* ---------- cursor glow + launcher ---------- */
