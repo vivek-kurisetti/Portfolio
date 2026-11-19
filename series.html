@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* Layout idea: a streaming-service home for one show, "Vivek: The Series" — intro sting, profile picker, billboard, rows of titles, detail sheets. */
+/* Layout idea: a streaming-service home for one show, "Vivek: The Series" — intro sting, billboard, rows of titles, detail sheets. */
 :root{
   --bg:#0a0a0c;          /* theatre dark */
   --panel:#16161a;       /* cards and sheets */
@@ -39,25 +39,6 @@ a{color:var(--gold)}
 #intro .skip{position:absolute;right:20px;bottom:20px;background:transparent;border:1px solid #333;color:var(--muted);border-radius:999px;padding:8px 14px;font-family:var(--font-mono);font-size:12px;cursor:pointer}
 #intro.gone{opacity:0;pointer-events:none}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
-/* ---------- profile picker ---------- */
-#who{position:fixed;inset:0;z-index:40;background:radial-gradient(80% 60% at 50% 40%,#17171c,#060607);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;padding:24px;transition:opacity .5s, transform .6s}
-#who h1{font-family:var(--font-display);font-weight:400;font-size:clamp(40px,6vw,72px);letter-spacing:.02em;margin:0;text-align:center}
-#who .profiles{display:flex;gap:clamp(14px,3vw,30px);flex-wrap:wrap;justify-content:center}
-.prof{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;animation:fadeUp .6s forwards}
-.prof:nth-child(2){animation-delay:.08s}.prof:nth-child(3){animation-delay:.16s}.prof:nth-child(4){animation-delay:.24s}
-.avatar{width:clamp(96px,13vw,150px);aspect-ratio:1;border-radius:14px;display:grid;place-items:center;border:3px solid transparent;transition:transform .25s, border-color .25s;position:relative;overflow:hidden}
-.avatar svg{width:46%;height:46%}
-.avatar::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.18),transparent 45%)}
-.prof:hover .avatar,.prof:focus-visible .avatar{transform:scale(1.07);border-color:var(--text)}
-.prof span{color:var(--muted);font-size:clamp(14px,1.6vw,18px);transition:color .2s}
-.prof small{display:block;color:#6e6a65;font-size:12px;text-align:center;max-width:150px}
-.prof:hover span{color:var(--text)}
-#who.gone{opacity:0;transform:scale(1.15);pointer-events:none}
-.a-rec{background:linear-gradient(135deg,#ff6b2c,#c2410c)}
-.a-eng{background:linear-gradient(135deg,#0f766e,#4fd1c5)}
-.a-fou{background:linear-gradient(135deg,#ffb547,#b45309)}
-.a-cur{background:linear-gradient(135deg,#6d28d9,#c084fc)}
 
 /* ---------- nav ---------- */
 nav.top{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:28px;padding:16px clamp(16px,4vw,56px);background:linear-gradient(#000c,transparent);transition:background .4s}
@@ -173,6 +154,29 @@ footer{padding:30px clamp(16px,4vw,56px);color:#6e6a65;font-size:13px}
 .strip{position:relative;height:4px;background:#2a2a31;border-radius:4px;margin:4px 0 6px;overflow:hidden}
 .strip i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--tide),var(--gold));transition:width .5s}
 
+/* ---------- AI agent pop-up ---------- */
+#agent{position:fixed;right:20px;bottom:86px;z-index:26;width:min(360px,calc(100vw - 32px));background:#141418f5;border:1px solid #3a3a42;border-radius:18px;padding:16px 16px 14px;box-shadow:0 30px 70px -20px #000,0 0 0 1px rgba(255,181,71,.08);transform-origin:calc(100% - 40px) 110%;transform:scale(.4) translateY(40px);opacity:0;pointer-events:none;transition:transform .5s cubic-bezier(.2,1.2,.3,1),opacity .3s;backdrop-filter:blur(12px)}
+#agent.show{transform:none;opacity:1;pointer-events:auto}
+#agent::after{content:"";position:absolute;right:42px;bottom:-8px;width:14px;height:14px;background:#141418;border-right:1px solid #3a3a42;border-bottom:1px solid #3a3a42;transform:rotate(45deg)}
+#agent .ah{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+#agent .ah b{display:block;font-size:15px}
+#agent .ah small{font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+#agent p{margin:0 0 12px;font-size:15px;line-height:1.5;color:#e6e2dc;min-height:3em}
+#agent .ax{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:0;background:#25252c;color:#bbb;cursor:pointer}
+.abtns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.btn.sm{font-size:14px;padding:9px 13px;border-radius:999px}
+.aq{display:flex;flex-direction:column;gap:6px}
+.aq button{text-align:left;font-size:13.5px;padding:8px 12px;border-radius:10px;border:1px solid #2f2f37;background:#1c1c22;color:#d7d3cd;cursor:pointer;transition:all .2s;opacity:0;animation:fadeUp .4s forwards}
+.aq button:hover{border-color:var(--gold);color:#fff;transform:translateX(3px)}
+.orb.talking{animation-duration:1.4s}
+.wave{display:none;align-items:center;gap:4px;height:26px;margin:-4px 0 10px}
+.wave.on{display:flex}
+.wave i{width:4px;height:6px;border-radius:3px;background:linear-gradient(var(--gold),var(--ember));animation:wv 0.9s ease-in-out infinite}
+.wave i:nth-child(2){animation-delay:.1s}.wave i:nth-child(3){animation-delay:.2s}.wave i:nth-child(4){animation-delay:.3s}.wave i:nth-child(5){animation-delay:.4s}.wave i:nth-child(6){animation-delay:.5s}.wave i:nth-child(7){animation-delay:.6s}
+@keyframes wv{0%,100%{height:6px}50%{height:24px}}
+.speak{margin-top:6px;font-family:var(--font-mono);font-size:11px;color:var(--gold);background:none;border:1px solid #ffb54744;border-radius:999px;padding:2px 9px;cursor:pointer}
+@media (max-width:760px){#agent{right:16px;bottom:76px}}
+
 /* ---------- ask drawer ---------- */
 .askbtn{position:fixed;right:20px;bottom:20px;z-index:25;display:flex;align-items:center;gap:10px;padding:12px 18px 12px 12px;border-radius:999px;border:1px solid #333;background:#16161aee;cursor:pointer;font-weight:700;box-shadow:0 14px 40px -10px #000;transition:transform .2s}
 .askbtn:hover{transform:translateY(-3px)}
@@ -231,17 +235,12 @@ footer{padding:30px clamp(16px,4vw,56px);color:#6e6a65;font-size:13px}
   <button class="skip" id="skip" type="button">Skip intro ›</button>
 </div>
 
-<!-- 2. who's viewing -->
-<div id="who" role="dialog" aria-label="Choose a profile">
-  <h1>Who's viewing?</h1>
-  <div class="profiles" id="profiles"></div>
-</div>
 
 <!-- 3. home -->
 <nav class="top" id="nav">
   <a class="brand" href="#home">VIVEK</a>
   <div class="links"><a href="#home">Home</a><a href="#row-picks">Projects</a><a href="#row-story">The full story</a><a href="#row-skills">Skills</a><a href="#tbc">Contact</a></div>
-  <div class="right"><button class="mini" id="me" type="button" aria-label="Switch profile" title="Switch profile"></button></div>
+
 </nav>
 
 <section class="billboard" id="home">
@@ -249,7 +248,7 @@ footer{padding:30px clamp(16px,4vw,56px);color:#6e6a65;font-size:13px}
   <div class="bb">
     <div class="orig"><b></b>A DATA ENGINEERING ORIGINAL</div>
     <h2 id="bbTitle"><span class="w" style="animation-delay:.1s">VIVEK</span> <span class="w" style="animation-delay:.25s">KURISETTI</span><span class="tag w" style="animation-delay:.5s">THE SERIES</span></h2>
-    <div class="metaRow"><span class="match" id="match">Top pick for you</span><span>2022 – now</span><span class="pill">PayU</span><span>5 seasons</span><span class="pill">Hyderabad</span></div>
+    <div class="metaRow"><span class="match" id="match">Now streaming</span><span>2022 – now</span><span class="pill">PayU</span><span>5 seasons</span><span class="pill">Hyderabad</span></div>
     <p class="syn" id="syn"></p>
     <div class="ctas">
       <button class="btn play" id="playBtn" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>Play</button>
@@ -263,9 +262,9 @@ footer{padding:30px clamp(16px,4vw,56px);color:#6e6a65;font-size:13px}
 
 <section class="tbc" id="tbc">
   <h4>To be continued<span class="dots"><i>.</i><i>.</i><i>.</i></span></h4>
-  <p>Next season is being written. Vivek is looking for data engineering roles in Hyderabad or Bangalore. If your team runs pipelines, lakehouses or a warehouse that costs too much, he'd like to hear from you.</p>
+  <p>Next season is being written. I'm looking for data engineering roles in Hyderabad or Bangalore. If your team runs pipelines, a lakehouse or a warehouse that costs too much, I'd love to talk.</p>
   <div class="ctas">
-    <a class="btn play" href="mailto:kurisettivivek@gmail.com">Email Vivek</a>
+    <a class="btn play" href="mailto:kurisettivivek@gmail.com">Email me</a>
     <a class="btn info" href="https://www.linkedin.com/in/vivek-kurisetti/" target="_blank" rel="noopener">LinkedIn ↗</a>
     <a class="btn info" href="https://github.com/vivek-kurisetti" target="_blank" rel="noopener">GitHub ↗</a>
   </div>
@@ -278,6 +277,17 @@ footer{padding:30px clamp(16px,4vw,56px);color:#6e6a65;font-size:13px}
 
 <!-- ask vivek -->
 <button class="askbtn" id="askbtn" type="button" aria-label="Ask about Vivek"><span class="orb"></span><span class="t">Ask Vivek</span></button>
+<div id="agent" role="dialog" aria-label="Quick summary" aria-hidden="true">
+  <button class="ax" id="agentX" type="button" aria-label="Dismiss">✕</button>
+  <div class="ah"><div class="orb talking" id="agentOrb"></div><div><b>Vivek's assistant</b><small>AI · answers from his profile</small></div></div>
+  <p id="agentText"></p>
+  <div class="wave" id="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="abtns">
+    <button class="btn play sm" id="agentSum" type="button">✦ Summarise for me</button>
+    <button class="btn info sm" id="agentListen" type="button">🔊 Listen (30s)</button>
+  </div>
+  <div class="aq" id="agentQs"></div>
+</div>
 <aside id="drawer" aria-label="Ask about Vivek">
   <div class="dh"><div class="orb" id="orb"></div><div><b>Ask about Vivek <span class="ai-badge" id="aimode">offline search</span></b><small>grounded in vivek-profile.md</small></div><button class="x" id="closeDrawer" type="button" aria-label="Close">✕</button></div>
   <div class="log" id="log" aria-live="polite"></div>
@@ -435,18 +445,18 @@ const WORKFLOWS = {
 /* ================= SHOW DATA ================= */
 const HUE={ "Pipelines":[24,8], "Lakehouse":[188,210], "Optimisation":[38,18], "ML data":[268,300], "Side project":[150,175] };
 const EPISODES=[
-  {s:"S1:E1", t:"The Intern", when:"Jan 2022 – Jul 2022", d:"Joins PayU as an intern straight out of NIT Warangal."},
-  {s:"S1:E2", t:"Associate Software Engineer", when:"Jul 2022 – Mar 2023", d:"First full-time role after the internship."},
-  {s:"S2:E1", t:"Database Administrator", when:"Apr 2023 – May 2024", d:"Runs and tunes production databases."},
-  {s:"S2:E2", t:"Senior Database Administrator", when:"Jun 2024 – Jun 2025", d:"Database performance, query tuning and housekeeping across MySQL and PostgreSQL."},
-  {s:"S3:E1", t:"Senior Data Engineer", when:"Jul 2025 – now", d:"Owns all near-real-time ETL pipelines and the lakehouse. Query and cost optimisation, data purging."}
+  {s:"S1:E1", t:"The Intern", when:"Jan 2022 – Jul 2022", d:"I joined PayU as an intern, fresh out of NIT Warangal."},
+  {s:"S1:E2", t:"Associate Software Engineer", when:"Jul 2022 – Mar 2023", d:"My first full-time role, straight after the internship."},
+  {s:"S2:E1", t:"Database Administrator", when:"Apr 2023 – May 2024", d:"I ran and tuned PayU's production databases."},
+  {s:"S2:E2", t:"Senior Database Administrator", when:"Jun 2024 – Jun 2025", d:"I owned database performance, query tuning and housekeeping across MySQL and PostgreSQL."},
+  {s:"S3:E1", t:"Senior Data Engineer", when:"Jul 2025 – now", d:"I own all the near-real-time ETL pipelines and the lakehouse, plus query and cost optimisation and data purging."}
 ];
 const MOMENTS=[
-  {big:"≈50%", t:"Faster queries", d:"Execution plan tuning plus sort key and dist key design on Redshift."},
-  {big:"$3K", t:"Saved every month", d:"The near-real-time pipeline rebuild cut $2,500–3,000 a month."},
-  {big:"≈30%", t:"Lower infra cost", d:"Redshift optimisation, including WLM tuning, cut infrastructure cost by about 30%."},
-  {big:"1–2m", t:"Source to lakehouse", d:"The Flink + Iceberg lakehouse makes data queryable within 1–2 minutes."},
-  {big:"289", t:"Drill levels shipped", d:"Dagdeep, his side project, has 289 drill levels across 26 topics."}
+  {big:"≈50%", t:"Faster queries", d:"I tuned execution plans and redesigned sort keys and dist keys on Redshift."},
+  {big:"$3K", t:"Saved every month", d:"My rebuild of the near-real-time pipeline saves $2,500–3,000 a month."},
+  {big:"≈30%", t:"Lower infra cost", d:"My Redshift optimisation, including WLM tuning, cut infrastructure cost by about 30%."},
+  {big:"1–2m", t:"Source to lakehouse", d:"The Flink + Iceberg lakehouse I built makes data queryable within 1–2 minutes."},
+  {big:"289", t:"Drill levels shipped", d:"Dagdeep, my side project, has 289 drill levels across 26 topics."}
 ];
 const SKILLS=[
   {t:"Streaming", d:"Kafka · Flink · Debezium", glyph:"≋"},
@@ -462,21 +472,9 @@ const QUESTS=[
   {t:"On the road", d:"Travel and new places", glyph:"⌖", hue:[20,45]},
   {t:"Books & Podcasts", d:"Business and economics", glyph:"❡", hue:[280,320]}
 ];
-const PROFILES={
-  recruiter:{name:"Recruiter", cls:"a-rec", note:"The highlights", icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg>',
-    syn:"Four promotions in under four years at PayU, from intern to Senior Data Engineer. Today he owns the near-real-time pipelines and the lakehouse. Open to roles in Hyderabad or Bangalore.",
-    rows:["picks","story","moments","skills","quests"]},
-  engineer:{name:"Engineer", cls:"a-eng", note:"The architecture", icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/></svg>',
-    syn:"CDC from MySQL and Postgres through Debezium and Kafka, processed in Spark and Flink, landing in Iceberg and Redshift. He made it about 50% faster and $2,500–3,000 a month cheaper.",
-    rows:["picks","skills","moments","story","quests"]},
-  founder:{name:"Founder", cls:"a-fou", note:"The impact", icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M5 19c4-1 6-4 7-9l3-6 3 3-6 3c-5 1-8 3-9 7z"/><circle cx="15" cy="9" r="1.2"/></svg>',
-    syn:"Builds data platforms that get faster and cheaper over time, and ships on the side: Dagdeep is a game for learning data and AI engineering with 289 drill levels.",
-    rows:["picks","moments","quests","story","skills"]},
-  curious:{name:"Just curious", cls:"a-cur", note:"The person", icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17v.5"/></svg>',
-    syn:"NIT Warangal chemical engineer turned data engineer. Badminton, cricket, travel, books and business podcasts when the pipelines are quiet.",
-    rows:["quests","picks","story","moments","skills"]}
-};
-let profile="recruiter";
+const SYNOPSIS="I'm a Senior Data Engineer at PayU. I own the near-real-time pipelines and the lakehouse that move payments data from MySQL and Postgres through Kafka, Spark and Flink into Iceberg and Redshift, and I keep them fast and cheap.";
+const ROWS=["picks","story","moments","skills","quests"];
+
 
 /* ---------- helpers ---------- */
 const $=s=>document.querySelector(s);
@@ -517,17 +515,6 @@ function runIntro(done){
   })(t0);
 }
 
-/* ================= 2. WHO'S VIEWING ================= */
-function showWho(){
-  const who=$("#who"); who.classList.remove("gone"); document.body.classList.add("locked");
-  $("#profiles").innerHTML=Object.entries(PROFILES).map(([k,p])=>`<button class="prof" type="button" data-k="${k}"><div class="avatar ${p.cls}">${p.icon}</div><span>${p.name}</span><small>${p.note}</small></button>`).join("");
-  $("#profiles").querySelectorAll(".prof").forEach(b=>b.onclick=()=>{
-    profile=b.dataset.k; try{ sessionStorage.setItem("vk-profile",profile); }catch(e){}
-    const av=b.querySelector(".avatar"); av.animate&&!reduce&&av.animate([{transform:"scale(1.07)"},{transform:"scale(1.35)",filter:"brightness(1.4)"}],{duration:380,easing:"ease-in",fill:"forwards"});
-    setTimeout(()=>{ who.classList.add("gone"); document.body.classList.remove("locked"); renderHome(); scrollTo(0,0); },reduce?0:340);
-  });
-}
-
 /* ================= 3. HOME ================= */
 function tileProject(p,i){
   const h=HUE[p.category]||[24,8];
@@ -541,7 +528,7 @@ function tileProject(p,i){
 function buildRow(kind){
   if(kind==="picks"){
     const list=PROJECTS.map((p,i)=>tileProject(p,i)).join("");
-    return {id:"row-picks", title:`Top picks for ${PROFILES[profile].name==="Just curious"?"you":PROFILES[profile].name+"s"}`, hint:"projects · tap for the full workflow", html:list};
+    return {id:"row-picks", title:"Top picks: my projects", hint:"tap any title for the full workflow", html:list};
   }
   if(kind==="story"){
     return {id:"row-story", title:"The full story", hint:"5 episodes · 2022 – now", html:EPISODES.map((e,i)=>`<div class="rank"><span class="n">${i+1}</span><button class="tile tall" type="button" data-ep="${i}" aria-label="${esc(e.t)}"><div class="art" style="background:${artBg([24+i*8,350-i*10],i)}"></div><div class="lab"><div class="sub">${e.s} · ${e.when}</div><div class="ttl">${esc(e.t)}</div></div></button></div>`).join("")};
@@ -557,13 +544,10 @@ function buildRow(kind){
   }
 }
 function renderHome(){
-  const P=PROFILES[profile];
-  $("#me").className="mini "+P.cls; $("#me").innerHTML=P.icon;
-  $("#match").textContent=`Top pick for ${P.name==="Just curious"?"you":P.name.toLowerCase()+"s"}`;
-  typeSyn(P.syn);
+  typeSyn(SYNOPSIS);
   // replay title animation
   document.querySelectorAll("#bbTitle .w").forEach(w=>{ w.style.animation="none"; void w.offsetWidth; w.style.animation=""; });
-  $("#rows").innerHTML=P.rows.map(k=>{ const r=buildRow(k); return `<section class="row" id="${r.id}"><h3>${r.title}<small>${r.hint} ›</small></h3><div class="rail"><button class="navbtn l" type="button" aria-label="Scroll left">‹</button><div class="scroller">${r.html}</div><button class="navbtn r" type="button" aria-label="Scroll right">›</button></div></section>`; }).join("");
+  $("#rows").innerHTML=ROWS.map(k=>{ const r=buildRow(k); return `<section class="row" id="${r.id}"><h3>${r.title}<small>${r.hint} ›</small></h3><div class="rail"><button class="navbtn l" type="button" aria-label="Scroll left">‹</button><div class="scroller">${r.html}</div><button class="navbtn r" type="button" aria-label="Scroll right">›</button></div></section>`; }).join("");
   // rails
   document.querySelectorAll(".rail").forEach(r=>{ const s=r.querySelector(".scroller");
     r.querySelector(".l").onclick=()=>s.scrollBy({left:-s.clientWidth*.85,behavior:"smooth"});
@@ -619,13 +603,12 @@ function openProject(p,from){
 function openEpisode(i,from){ const e=EPISODES[i];
   openSheet(`${hero(artBg([24+i*8,350-i*10],i),esc(e.t),e.s+" · "+e.when)}<div class="body"><div class="meta"><span class="match">PayU</span><span>${e.when}</span></div><p class="d">${esc(e.d)}</p>
   <div class="eps"><h6>All episodes</h6>${EPISODES.map((x,j)=>`<div class="ep ${j===i?"on":""}"><div class="num">${j+1}</div><div><b>${esc(x.t)} <small style="color:var(--muted);font-weight:400">· ${x.when}</small></b><span>${esc(x.d)}</span></div></div>`).join("")}
-  <div class="ep"><div class="num" style="font-size:22px">◎</div><div><b>Before the show</b><span>B.Tech in Chemical Engineering, NIT Warangal (2018–2022).</span></div></div></div></div>`,from); }
+  <div class="ep"><div class="num" style="font-size:22px">◎</div><div><b>Before the show</b><span>I studied Chemical Engineering at NIT Warangal (B.Tech, 2018–2022).</span></div></div></div></div>`,from); }
 function openMoment(i,from){ const m=MOMENTS[i]; openSheet(`${hero(artBg([30+i*6,8],i),m.big+" · "+esc(m.t),"TOP MOMENT")}<div class="body"><p class="d">${esc(m.d)}</p></div>`,from); }
-function openSkill(i,from){ const s=SKILLS[i]; openSheet(`${hero(artBg([180+i*22,220+i*15],i),esc(s.t),"SKILL UNIVERSE")}<div class="body"><div class="chips">${s.d.split(" · ").map(x=>`<span>${esc(x)}</span>`).join("")}</div><p class="d">Used across his PayU pipelines: CDC with Debezium and Kafka, processing in Spark and Flink, a lakehouse on Iceberg and S3, and Redshift for analytics.</p></div>`,from); }
-function openQuest(i,from){ const q=QUESTS[i]; openSheet(`${hero(artBg(q.hue,i),esc(q.t),"SIDE QUEST")}<div class="body"><p class="d">${esc(q.d)}. Ask the bot for more about life outside work.</p></div>`,from); }
+function openSkill(i,from){ const s=SKILLS[i]; openSheet(`${hero(artBg([180+i*22,220+i*15],i),esc(s.t),"SKILL UNIVERSE")}<div class="body"><div class="chips">${s.d.split(" · ").map(x=>`<span>${esc(x)}</span>`).join("")}</div><p class="d">I use these every day across my PayU pipelines: CDC with Debezium and Kafka, processing in Spark and Flink, a lakehouse on Iceberg and S3, and Redshift for analytics.</p></div>`,from); }
+function openQuest(i,from){ const q=QUESTS[i]; openSheet(`${hero(artBg(q.hue,i),esc(q.t),"SIDE QUEST")}<div class="body"><p class="d">${esc(q.d)}. Ask my assistant if you want to know more about life outside work.</p></div>`,from); }
 $("#infoBtn").onclick=e=>openEpisode(EPISODES.length-1,e.currentTarget);
 $("#playBtn").onclick=e=>openProject(PROJECTS[0],e.currentTarget);
-$("#me").onclick=()=>showWho();
 
 /* nav solid on scroll */
 addEventListener("scroll",()=>$("#nav").classList.toggle("solid",scrollY>40),{passive:true});
@@ -783,13 +766,47 @@ Answer ONLY from the profile document below.
 
 
 
+
+/* ================= AI AGENT POP-UP + VOICE ================= */
+const QUICK_SUMMARY="Vivek Kurisetti is a Senior Data Engineer at PayU in Hyderabad. He joined as an intern in January 2022 and moved up through software engineering and database administration to data engineering. Today he owns PayU's near-real-time pipelines and lakehouse: change data capture with Debezium and Kafka, processing in Spark and Flink, Iceberg on S3, and Redshift. His pipeline rebuild made queries about 50% faster and saves $2,500 to $3,000 a month, and his Redshift work cut infrastructure cost by about 30%. On the side he built Dagdeep, a game for learning data and AI engineering. He's open to roles in Hyderabad or Bangalore.";
+const Voice=(function(){
+  const ok=("speechSynthesis" in window) && ("SpeechSynthesisUtterance" in window);
+  let btn=null;
+  function pick(){ const v=speechSynthesis.getVoices(); return v.find(x=>/en-IN/i.test(x.lang))||v.find(x=>/en-GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang)); }
+  function stop(){ if(!ok) return; speechSynthesis.cancel(); if(btn){ btn.textContent=btn.dataset.label||"🔊 Listen"; } btn=null; $("#wave").classList.remove("on"); }
+  function speak(text,b){
+    if(!ok) return; stop(); const u=new SpeechSynthesisUtterance(text.replace(/[·→↳]/g," ")); const v=pick(); if(v) u.voice=v; u.rate=1.03; u.pitch=1;
+    btn=b||null; if(btn){ btn.dataset.label=btn.dataset.label||btn.textContent; btn.textContent="■ Stop"; }
+    if(b && b.id==="agentListen") $("#wave").classList.add("on");
+    u.onend=u.onerror=()=>stop(); speechSynthesis.speak(u);
+  }
+  function toggle(text,b){ if(btn===b){ stop(); return; } speak(text,b); }
+  return {ok,speak,stop,toggle};
+})();
+let agentShown=false;
+function hideAgent(){ $("#agent").classList.remove("show"); $("#agent").setAttribute("aria-hidden","true"); }
+function showAgent(){
+  if(agentShown || $("#drawer").classList.contains("open") || $("#sheet").classList.contains("open")) return; agentShown=true;
+  const el=$("#agent"); el.classList.add("show"); el.setAttribute("aria-hidden","false");
+  if(!Voice.ok) $("#agentListen").style.display="none";
+  const msg="Hi! Short on time? I can give you the 30-second version of Vivek, read it out loud, or answer a quick question.";
+  const p=$("#agentText"); if(reduce) p.textContent=msg; else { let i=0; const iv=setInterval(()=>{ i+=2; p.textContent=msg.slice(0,i); if(i>=msg.length) clearInterval(iv); },18); }
+  const QS=["What has he built?","How much did he save PayU?","Is he open to new roles?"];
+  $("#agentQs").innerHTML=QS.map((q,i)=>`<button type="button" style="animation-delay:${.6+i*.12}s">${q} ›</button>`).join("");
+}
+$("#agentX").onclick=()=>{ Voice.stop(); hideAgent(); };
+$("#agentListen").onclick=e=>Voice.toggle(QUICK_SUMMARY,e.currentTarget);
+$("#agentSum").onclick=()=>{ Voice.stop(); hideAgent(); openDrawer(); setTimeout(()=>window.__ask("Give me the 30-second summary of Vivek"),380); };
+$("#agentQs").onclick=e=>{ const b=e.target.closest("button"); if(!b) return; hideAgent(); openDrawer(); setTimeout(()=>window.__ask(b.textContent.replace(/ ›$/,"")),380); };
+$("#askbtn").addEventListener("click",hideAgent);
+
 /* ================= ASK DRAWER ================= */
 function openDrawer(){ $("#drawer").classList.add("open"); setTimeout(()=>$("#q").focus({preventScroll:true}),350); }
 function closeDrawer(){ $("#drawer").classList.remove("open"); }
 $("#askbtn").onclick=openDrawer; $("#closeDrawer").onclick=closeDrawer;
 (function(){
   const log=$("#log"), form=$("#form"), q=$("#q"), orb=$("#orb");
-  const SUGG=["Where did Vivek graduate from?","What's his tech stack?","Tell me about his projects","Where is he based?","What is Dagdeep?"];
+  const SUGG=["Give me the 30-second summary","What's his tech stack?","Tell me about his projects","Where is he based?","What is Dagdeep?"];
   const sug=$("#suggest"); sug.innerHTML=SUGG.map(s=>`<button type="button">${s}</button>`).join("");
   sug.addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) ask(b.textContent); });
   function add(cls,html){ const d=document.createElement("div"); d.className="msg "+cls; d.innerHTML=html; log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
@@ -801,6 +818,10 @@ $("#askbtn").onclick=openDrawer; $("#closeDrawer").onclick=closeDrawer;
     const t=add("bot",'<span class="typing"><i></i><i></i><i></i></span>'); orb.classList.add("thinking");
     let out=null, src="";
     if(Bot.aboutSomeoneElse(text)){ out=Bot.OFFSCOPE; t.innerHTML=""; const sp=document.createElement("span"); t.appendChild(sp); await typeOut(sp,out); }
+    else if(/summar|30.?second|quick version|tl;?dr|in short|overview/i.test(text) && !AI.available()){
+      await new Promise(r=>setTimeout(r, reduce?0:450)); out=QUICK_SUMMARY; src="↳ summary of vivek-profile.md";
+      t.innerHTML=""; const sp=document.createElement("span"); t.appendChild(sp); await typeOut(sp,out);
+    }
     else if(AI.available()){
       try{
         let span=null;
@@ -815,6 +836,7 @@ $("#askbtn").onclick=openDrawer; $("#closeDrawer").onclick=closeDrawer;
       t.innerHTML=""; const span=document.createElement("span"); t.appendChild(span); await typeOut(span,out);
     }
     if(src) t.insertAdjacentHTML("beforeend",`<span class="src">${esc(src)}</span>`);
+    if(Voice.ok && out!==Bot.OFFSCOPE){ const b=document.createElement("button"); b.type="button"; b.className="speak"; b.textContent="🔊 Listen"; b.onclick=()=>Voice.toggle(out,b); t.appendChild(b); }
     history.push({role:"user",text},{role:"assistant",text:out});
     orb.classList.remove("thinking"); log.scrollTop=log.scrollHeight; busy=false;
   }
@@ -826,8 +848,7 @@ $("#askbtn").onclick=openDrawer; $("#closeDrawer").onclick=closeDrawer;
 /* ================= START ================= */
 (async function(){
   try{ await Promise.race([document.fonts.load('120px "Bebas Neue"'), new Promise(r=>setTimeout(r,1200))]); }catch(e){}
-  let saved=null; try{ saved=sessionStorage.getItem("vk-profile"); }catch(e){}
-  runIntro(()=>{ if(saved && PROFILES[saved]){ profile=saved; $("#who").classList.add("gone"); document.body.classList.remove("locked"); renderHome(); } else showWho(); });
+  runIntro(()=>{ document.body.classList.remove("locked"); renderHome(); scrollTo(0,0); setTimeout(showAgent, reduce?1500:3500); });
 })();
 </script>
 </body>
